@@ -9,26 +9,7 @@ import AboutSectionTwo from "../../../components/intro2";
 import Footer2 from "../../../components/Footer/Footer2";
 import ChatBotComponent from "../../../components/utils/Chatbox";
 
-
 export default function index() {
-  const dumyService = [
-    {
-      title: "Bantuan Covid-19",
-      subtitle: "@nikeardiana",
-      image: avatar1,
-      content:
-        "Bantuan Dana suntik vaksin Covid-19 di desa terpencil daerah bandung selatan",
-      avatar: avatar1,
-    },
-    {
-      title: "Pengobatan Darurat",
-      subtitle: "@maurikusuma",
-      image: avatar2,
-      content:
-        "Bantuan Dana darurat untuk pengobatan pasien yang terkena penyakit langka",
-      avatar: avatar2,
-    },
-  ];
   return (
     <div>
       {/* <Navbar /> */}
