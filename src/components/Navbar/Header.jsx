@@ -11,8 +11,11 @@ import {
   FaWhatsapp,
   FaUserCircle,
 } from "react-icons/fa";
+import { useRecoilState } from "recoil";
+import { authState } from "../../store/store";
 const Header = () => {
-  const user = localStorage.getItem("role");
+  const role = localStorage.getItem("role");
+
   return (
     <header className="navigation">
       {/* Header Top */}
@@ -167,13 +170,13 @@ const Header = () => {
                   </a>
                 </div>
               </li>
-              {user === "viewer" ? (
+              {role === "viewer" ? (
                 <li className="navbar-item">
                   <a className="navbar-link" href="/viewer/dashboard">
                     User Dashboard
                   </a>
                 </li>
-              ) : user === "admin" ? (
+              ) : role === "admin" ? (
                 <li className="navbar-item">
                   <a className="navbar-link" href="/admin/dashboard">
                     Admin Dashboard
