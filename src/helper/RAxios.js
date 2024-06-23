@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInterceptor = axios.create({
-  baseURL: `https://localhost:7169/`,
+  baseURL: `https://development-rentapp-8d3349904b3d.herokuapp.com/`,
 });
 
 axiosInterceptor.interceptors.request.use(

@@ -3,7 +3,7 @@ import axios from "axios";
 const login = async (username, password) => {
   try {
     const response = await axios.post(
-      `https://localhost:7169/api/auth/login?username=${username}&password=${password}`
+      `https://development-rentapp-8d3349904b3d.herokuapp.com/api/auth/login?username=${username}&password=${password}`
     );
 
     const { token, role, client_id } = response.data.data;
@@ -24,7 +24,7 @@ const login = async (username, password) => {
 const register = async (formData) => {
   try {
     const response = await axios.post(
-      "https://localhost:7169/api/auth/register",
+      "https://development-rentapp-8d3349904b3d.herokuapp.com/api/auth/register",
       formData
     );
 
