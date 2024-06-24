@@ -1,17 +1,76 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CardPro from "../../../components/Admin/product/ProductCard";
 import ModalAddTemp from "./components/ModalAdd";
-
+import { getAllTemplates } from "../../../services/Template/template.services";
+import { getAllCatalogues } from "../../../services/Catalog/catalog.services";
+import { axiosWrapper } from "../../../helper/axiosWrapper";
+import loading from "../../../assets/loading.gif";
 export default function Index() {
   const [isActive, setIsActive] = useState(false);
   const [modalAdd, setModalAdd] = useState(false);
-
+  const [data, setData] = useState([]);
+  const [getCategories, setGetCategories] = useState([]);
+  const [selectedCatalog, setSelectedCatalog] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [countData, setCountData] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const limit = 8;
   const toggleDropdown = () => {
     setIsActive(!isActive);
   };
 
   const toggleModal = () => {
     setModalAdd(!modalAdd);
+  };
+
+  useEffect(() => {
+    fetchTemplates();
+    fetchCatalogues();
+  }, [selectedCatalog, currentPage, modalAdd]);
+
+  useEffect(() => {
+    if (countData > 0) {
+      const totalPagesCount = Math.ceil(countData / limit);
+      setTotalPages(totalPagesCount);
+    }
+  }, [countData, limit]);
+
+  const fetchTemplates = async () => {
+    setIsLoading(true);
+    try {
+      const data = await axiosWrapper.post(`/api/Template/getall_templates`, {
+        page: currentPage,
+        limit: limit,
+        isAsc: true,
+        keyword: "",
+        id_catalogue: selectedCatalog,
+      });
+      setData(data.data.data);
+      setCountData(data.data.resultCountData);
+    } catch (error) {
+      console.error("Error fetching catalogues:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchCatalogues = async () => {
+    try {
+      const data = await getAllCatalogues(1, 10, true, "");
+      setGetCategories(data.data);
+    } catch (error) {
+      console.error("Error fetching catalogues:", error);
+    }
+  };
+
+  const handleCatalogueChange = (catalogueId) => {
+    setSelectedCatalog(catalogueId);
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -68,16 +127,18 @@ export default function Index() {
               </div>
               <div className="dropdown-menu" id="dropdown-menu" role="menu">
                 <div className="dropdown-content">
-                  <a href="#" className="dropdown-item">
-                    Otomotif
-                  </a>
-                  <a className="dropdown-item">Wedding</a>
-                  <a href="#" className="dropdown-item is-active">
-                    Romance
-                  </a>
-                  <a href="#" className="dropdown-item">
-                    Business
-                  </a>
+                  {getCategories.map((catalogue) => (
+                    <a
+                      key={catalogue.id}
+                      href="#"
+                      className={`dropdown-item ${
+                        selectedCatalog === catalogue.id ? "is-active" : ""
+                      }`}
+                      onClick={() => handleCatalogueChange(catalogue.id)}
+                    >
+                      {catalogue.catalog_name}
+                    </a>
+                  ))}
                   <hr className="dropdown-divider" />
                   <a href="#" className="dropdown-item">
                     Setting Catalog
@@ -101,24 +162,48 @@ export default function Index() {
 
       {/* Product cards section */}
       <section className="container mt-10">
-        <div className="columns features">
-          <CardPro
-            imageSrc="https://marketplace.canva.com/EAFy1HyqOdA/1/0/1143w/canva-blue-white-simple-wedding-invitation-FFIFUrRuYg0.jpg"
-            altText="Placeholder image 1"
-            title="Template Valentine's Day Card"
-            content="Template kartu Valentine ini adalah perwujudan dari kasih sayang yang tulus. Didesain dengan nuansa yang hangat dan menyentuh hati, kartu ini menggambarkan kelembutan dan keindahan dalam bentuknya yang sederhana namun penuh makna. "
-            modalTargetId="modal-image2"
-          />
-          {/* <CardPro
-            imageSrc="https://img.freepik.com/free-vector/flat-minimal-wedding-vertical-banners-set_23-2150101550.jpg?t=st=1718476505~exp=1718480105~hmac=bc1915602bcf2ac864a9a33bf3e1e6647d2c05a4a3eece23af68cbf53edbc39e&w=826"
-            altText="Template Wedding Card 1"
-            title="Template Wedding Card 1"
-            content="template undangan nikah online ini memancarkan kesan elegan dan keanggunan. Dirancang untuk memudahkan para pengundang dalam mengakses informasi yang penting, kombinasi sempurna antara kemudahan teknologi modern dan kehangatan."
-            modalTargetId="modal-card"
-          /> */}
-          {/* Add more Card components as needed */}
-        </div>
+        {isLoading ? (
+          <div
+            className="has-text-centered mt-5"
+            style={{ display: "flex", justifyContent: "center" }}
+          >
+            <span className="icon is-large">
+              <i className="fas fa-spinner fa-pulse"></i>
+            </span>
+            <img src={loading} alt="loading" />
+          </div>
+        ) : (
+          <div className="columns features">
+            <CardPro data={data} setData={setData} />
+          </div>
+        )}
       </section>
+
+      <div className="mt-10">
+        <nav
+          className="pagination is-centered"
+          role="navigation"
+          aria-label="pagination"
+        >
+          <ul className="pagination-list">
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+              (page) => (
+                <li key={page}>
+                  <button
+                    className={`pagination-link ${
+                      currentPage === page ? "is-current" : ""
+                    }`}
+                    aria-label={`Goto page ${page}`}
+                    onClick={() => handlePageChange(page)}
+                  >
+                    {page}
+                  </button>
+                </li>
+              )
+            )}
+          </ul>
+        </nav>
+      </div>
     </div>
   );
 }

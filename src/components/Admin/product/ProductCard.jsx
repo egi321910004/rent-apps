@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ModalConfig from "../../../pages/Admin/product/Configuration/TempConfig";
 
-const CardPro = ({ imageSrc, altText, title, content, modalTargetId }) => {
+const CardPro = ({ data, setData }) => {
   const [modalConfig, setModalConfig] = React.useState(false);
 
   const openConfig = () => {
@@ -9,63 +9,79 @@ const CardPro = ({ imageSrc, altText, title, content, modalTargetId }) => {
   };
 
   return (
-    <div className="column is-4">
+    <div className="">
       <ModalConfig
         isActive={modalConfig}
         onClose={() => setModalConfig(false)}
       />
-      <div className="card is-shady">
-        <div className="card-image">
-          <figure className="image is-4by3">
-            <img
-              src={imageSrc}
-              alt={altText}
-              className="modal-button"
-              data-target={modalTargetId}
-            />
-          </figure>
-        </div>
-        <div className="card-content">
-          <div className="content">
-            <h4>{title}</h4>
-            <span className="tag is-black m-1">Romantis</span>
-            <span className="tag is-dark m-1">Undangan</span>
-            <span className="tag is-light m-1">Wedding</span>
-            <span className="tag is-white m-1">Spesial</span>
-            <span className="tag is-primary m-1">Promo</span>
-            <span className="tag is-link m-1">Free</span>
-            <span className="tag is-info m-1">Indonesia</span>
-            <span className="tag is-success m-1">Top 10</span>
-            <span className="tag is-warning m-1">News</span>
-            <span className="tag is-danger m-1">Most Subs</span>
-            <p className="mt-2">{content}</p>
-            <div
-              className="mt-4"
-              style={{ display: "flex", justifyContent: "end" }}
-            >
-              <button
-                className="button is-info is-outlined modal-button mr-2"
-                data-target={modalTargetId}
-                onClick={() => openConfig()}
+      <div
+        className="card-container"
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "space-around",
+        }}
+      >
+        {data.map((card, index) => (
+          <div
+            key={index}
+            className="card is-shady"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              border: "1px solid #ddd",
+              borderRadius: "5px",
+              backgroundColor: "#fff",
+              boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+              margin: "10px",
+              width: "calc(25% - 20px)",
+            }}
+          >
+            <div className="card-image">
+              <figure className="image is-4by3">
+                {card.image_templates.map((image, imgIndex) => (
+                  <img
+                    key={imgIndex}
+                    src={`data:image/png;base64,${image.image}`}
+                    className="modal-button"
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      objectFit: "cover",
+                    }}
+                    alt={`Image ${imgIndex}`} // Provide a meaningful alt text
+                  />
+                ))}
+              </figure>
+            </div>
+            <div className="card-content" style={{ padding: "10px" }}>
+              <h4>{card.template_name}</h4>
+              <div>
+                <span className="tag is-black m-1">{card.catalogue}</span>
+              </div>
+              <p className="mt-2">{card.description}</p>
+              <div
+                className="mt-4"
+                style={{ display: "flex", justifyContent: "end" }}
               >
-                Configuration
-              </button>
-              <span
-                className="button is-warning is-outlined modal-button"
-                data-target={modalTargetId}
-              >
-                Edit
-              </span>
-              <span
-                className="button is-danger is-outlined modal-button ml-2"
-                data-target={modalTargetId}
-              >
-                Delete
-              </span>
+                <button
+                  className="button is-info is-outlined modal-button mr-2"
+                  onClick={() => openConfig()}
+                >
+                  Configuration
+                </button>
+                <span className="button is-warning is-outlined modal-button">
+                  Edit
+                </span>
+                <span className="button is-danger is-outlined modal-button ml-2">
+                  Delete
+                </span>
+              </div>
             </div>
           </div>
-        </div>
+        ))}
       </div>
+
       {/* <Modal
         targetId={modalTargetId}
         imageSrc={imageSrc}

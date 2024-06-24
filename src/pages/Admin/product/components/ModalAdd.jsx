@@ -43,6 +43,18 @@ const ModalAddTemp = ({ isActive, onClose }) => {
     });
   };
 
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const base64String = reader.result.split(",")[1];
+        resolve(base64String);
+      };
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
   const handleSubmit = async () => {
     const result = await Swal.fire({
       title: "Do you want to publish Template?",
@@ -53,27 +65,33 @@ const ModalAddTemp = ({ isActive, onClose }) => {
     });
 
     if (result.isConfirmed) {
-      const formData = new FormData();
-      formData.append("name_template", templateData.name_template);
-      formData.append("design_by", templateData.design_by);
-      formData.append("link_demo", templateData.link_demo);
-      formData.append("description", templateData.description);
-      formData.append("id_catalogue", selectedColor || "");
+      const requestData = {
+        id_catalogue: selectedColor || "",
+        template_name: templateData.name_template,
+        design_by: templateData.design_by,
+        link_demo: templateData.link_demo,
+        description: templateData.description,
+        image_templates: [],
+      };
 
-      selectedFiles.forEach((file, index) => {
-        formData.append(`image_${index}`, file, file.name);
-      });
+      for (const file of selectedFiles) {
+        const base64 = await fileToBase64(file);
+        requestData.image_templates.push({
+          name: file.name,
+          image_template: base64,
+        });
+      }
 
       try {
         const response = await fetch(
-          "https://localhost:7169/api/Template/create_template",
+          "https://development-rentapp-8d3349904b3d.herokuapp.com/api/Template/create_template",
           {
             method: "POST",
             headers: {
+              "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
-              // "Content-Type": "multipart/form-data", // Note: FormData automatically sets the correct Content-Type
             },
-            body: formData,
+            body: JSON.stringify(requestData),
           }
         );
 
