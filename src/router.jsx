@@ -13,6 +13,7 @@ import TemplateView from "./pages/Viewer/Template/TemplateViewer";
 import ViewerSubs from "./pages/Viewer/Subscribe/ViewerSubs";
 import DashboardAnalytics from "./pages/Viewer/Subscribe/Analytics/DashboardAnalytics";
 import PublishTemp from "./pages/Admin/PublishTemp";
+import TemplateSummer from "./components/Template/Template1/Template1.jsx";
 export default function Mainrouter() {
   const role = localStorage.getItem("role");
 
@@ -47,6 +48,10 @@ export default function Mainrouter() {
           <Route path="analytics" element={<DashboardAnalytics />} />
         </Route>
       )}
+
+      {/* Templates */}
+
+      <Route path="/Template/Wedding/Summerset" element={<TemplateSummer />} />
 
       {/* Handle unknown paths */}
       <Route path="*" element={<Navigate to="/" />} />

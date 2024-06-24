@@ -240,7 +240,7 @@ const TemplateView = () => {
                 <div
                   style={{
                     display: "flex",
-                    justifyContent: "flex-end",
+                    justifyContent: "center",
                     padding: "10px",
                   }}
                 >
@@ -249,7 +249,7 @@ const TemplateView = () => {
                     data-target={card.modalTargetId}
                     style={{ marginLeft: "8px" }}
                   >
-                    Add Template
+                    Add
                   </button>
                   <button
                     className="button is-info is-outlined modal-button"
@@ -259,6 +259,13 @@ const TemplateView = () => {
                   >
                     Detail
                   </button>
+                  <a
+                    href="/Template/Wedding/Summerset"
+                    style={{ marginLeft: "8px" }}
+                    className="button is-warning is-outlined modal-button"
+                  >
+                    Demo
+                  </a>
                 </div>
               </div>
             </div>

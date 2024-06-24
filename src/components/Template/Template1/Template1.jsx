@@ -67,7 +67,11 @@ const WeddingComponent = ({
           style={{
             backgroundSize: "cover",
             backgroundPosition: "center",
-            backgroundImage: `url(${weddingurl})`,
+            backgroundImage: `url(${
+              weddingurl
+                ? weddingurl
+                : "https://img.freepik.com/free-photo/floral-background-with-space-middle_23-2147730169.jpg?t=st=1719122631~exp=1719126231~hmac=b7f6a5f08e6d0b196f20b0e76e5b1af8063b895db6339a90e5649186532d1ddb&w=1380"
+            })`,
             minHeight: isMobileView ? "100vh" : "50vh", // Adjust height for mobile view
             display: "flex",
             flexDirection: "column",
@@ -83,11 +87,15 @@ const WeddingComponent = ({
               <div className="col-md-8 col-md-offset-2 text-center">
                 <h4 className="sub-title">The Wedding of</h4>
                 <h1 className="title">
-                  {name1} &amp; {name2}
+                  {name1 ? name1 : "Name1"} &amp; {name2 ? name2 : "Name2"}
                 </h1>
-                <div className="margin__bottom mb-4">{ucapan}</div>
+                <div className="margin__bottom mb-4">
+                  {ucapan
+                    ? ucapan
+                    : "Sambutan Exp: Dengan penuh sukacita, kami mengundang Anda untuk berbagi kebahagiaan kami saat kami menyatukan cinta dan harapan dalam ikatan suci pernikahan..."}
+                </div>
                 <div className="row" style={{ justifyContent: "center" }}>
-                  <div className="col-md-3">
+                  <div className="col-md-3 mt-5">
                     <a
                       href={GOOGLE_CALENDAR_LINK}
                       title="Add to My Calendar"
@@ -110,6 +118,7 @@ const WeddingComponent = ({
                   }}
                 >
                   {renderGuestSection(penerima)}
+
                   <div className="row">
                     <div className="col-md-3">
                       <Link to={`/e-ticket?1`}>
