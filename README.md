@@ -39,21 +39,21 @@ npm run dev
 <table>
   <tr>
     <td align="center">
-      <a href="#">
+      <a href="https://github.com/alxtim10">
         <sub>
           <b>Alexander Sitompul</b>
         </sub>
       </a>
     </td>
     <td align="center">
-      <a href="#">
+      <a href="https://github.com/egi321910004">
         <sub>
           <b>Egi Rizki R</b>
         </sub>
       </a>
     </td>
     <td align="center">
-      <a href="#">
+      <a href="https://github.com/ImamNugroho07">
         <sub>
           <b>Imam Nugroho</b>
         </sub>
